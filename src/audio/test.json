@@ -1,0 +1,26 @@
+[
+  {
+    "role": "Host",
+    "line": "Welcome to our podcast!"
+  },
+  {
+    "role": "Expert",
+    "line": "Thank you for having me."
+  },
+  {
+    "role": "Host",
+    "line": "Can you tell us about your latest research?"
+  },
+  {
+    "role": "Expert",
+    "line": "Sure, I'd be happy to."
+  },
+  {
+    "role": "Host",
+    "line": "That's fascinating. How did you come up with the idea?"
+  },
+  {
+    "role": "Expert",
+    "line": "It all started when I noticed a gap in the existing literature."
+  }
+]
