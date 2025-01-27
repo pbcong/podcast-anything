@@ -4,7 +4,7 @@ import axios from "axios";
 import Form from "./components/Form";
 
 function App() {
-  const API_URL = "http://127.0.0.1:5000";
+  const API_URL = "https://podcast-anything.onrender.com";
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [filePath, setFilePath] = useState("");
