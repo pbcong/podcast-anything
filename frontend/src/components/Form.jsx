@@ -1,7 +1,13 @@
 import React from "react";
 import { useState } from "react";
 
-const Form = ({ handleFileChange, handleTextChange, handleSubmit, topic }) => {
+const Form = ({
+  handleFileChange,
+  handleTextChange,
+  handleSubmit,
+  topic,
+  loading,
+}) => {
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -20,7 +26,9 @@ const Form = ({ handleFileChange, handleTextChange, handleSubmit, topic }) => {
           onChange={handleTextChange}
         />
       </div>
-      <button type="submit">Generate Podcast</button>
+      <button type="submit" disabled={loading}>
+        {loading ? "Genreating..." : "Generate Podcast"}
+      </button>
     </form>
   );
 };

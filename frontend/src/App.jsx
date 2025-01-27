@@ -8,6 +8,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [filePath, setFilePath] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("running");
@@ -15,10 +16,12 @@ function App() {
     formData.append("file", file);
     formData.append("topic", topic);
     try {
+      setLoading(true);
       const response = await axios.post(
         `${API_URL}/generate_podcast`,
         formData
       );
+      setLoading(false);
       console.log(response);
       setFilePath(response.data.audio_file_path);
     } catch (error) {
@@ -28,12 +31,12 @@ function App() {
   const handleTextChange = (event) => {
     event.preventDefault();
     setTopic(event.target.value);
-    console.log(topic);
+    // console.log(topic);
   };
   const handleFileChange = (event) => {
     event.preventDefault();
     setFile(event.target.files[0]);
-    console.log(file);
+    // console.log(file);
   };
   return (
     <div className="App">
@@ -41,6 +44,7 @@ function App() {
         handleFileChange={handleFileChange}
         handleTextChange={handleTextChange}
         handleSubmit={handleSubmit}
+        loading={loading}
       />
 
       {filePath && (
