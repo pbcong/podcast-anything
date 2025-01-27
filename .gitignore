@@ -204,3 +204,5 @@ playground/
 .deepspeed_env
 output/
 checkpoints/
+# Local Netlify folder
+.netlify

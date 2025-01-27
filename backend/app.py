@@ -9,7 +9,7 @@ import os
 import tempfile
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://podcast-anything.netlify.app"}})
 @app.route("/generate_podcast", methods=['POST'])
 def generate_podcast():
     file = request.files['file']
@@ -33,6 +33,10 @@ def generate_podcast():
         
     # Return the path to the generated audio file
     return jsonify({'audio_file_path': speech_file_path})
+
+@app.route("/status", methods=['GET'])
+def get_status():
+    return jsonify({'status': 'OK'})
 
 @app.route('/download/<path:filename>', methods=['GET'])
 def download_audio(filename):
