@@ -7,7 +7,7 @@ load_dotenv()
 
 class llm_wrapper:
     def __init__(self, config):
-        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.api_key = os.environ.get("OPENAI_API_KEY")
         self.model = config.text_model
         self.temperature = config.temperature
         self.client = OpenAI(api_key=self.api_key)

@@ -9,7 +9,7 @@ import os
 import tempfile
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://podcast-anything.netlify.app"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route("/generate_podcast", methods=['POST'])
 def generate_podcast():
     file = request.files['file']
@@ -17,6 +17,7 @@ def generate_podcast():
 
     # Create a temporary directory
     file_path = os.path.join('./tmp', file.filename)
+    os.makedirs('./tmp', exist_ok=True)
     file.save(file_path)
         
     config = Config()
@@ -28,7 +29,7 @@ def generate_podcast():
     if script.startswith('```json'):
         script = script[7:-3]
     script = json.loads(script.replace("json\n", ""))
-    speech_file_path = TTS.get_audio(script, output_path=os.path.join('./tmp', 'combined_audio.mp3'))
+    speech_file_path = TTS.get_audio(script, output_path=os.path.join('./tmp/', 'combined_audio.mp3'))
     os.remove(file_path)
         
     # Return the path to the generated audio file
