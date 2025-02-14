@@ -2,9 +2,10 @@ import { useState } from "react";
 import "./App.css";
 import axios from "axios";
 import Form from "./components/Form";
+import Chat from "./components/Chat";
 
 function App() {
-  const API_URL = "https://podcast-anything.onrender.com";
+  const API_URL = "http://127.0.0.1:5000";
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [filePath, setFilePath] = useState("");
@@ -46,6 +47,13 @@ function App() {
         handleSubmit={handleSubmit}
         loading={loading}
       />
+
+      <div className="mt-12 mb-8">
+        <h2 className="text-2xl font-semibold text-center mb-4">
+          Ask me anything about the document
+        </h2>
+        <Chat file={file} />
+      </div>
 
       {filePath && (
         <div>
