@@ -14,6 +14,10 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def generate_podcast():
     file = request.files['file']
     topic = request.form['topic']
+    api_key = request.form['api_key']
+    
+    if not api_key:
+        return jsonify({'error': 'OpenAI API key is required'}), 400
 
     # Create a temporary directory
     file_path = os.path.join('./tmp', file.filename)
@@ -23,14 +27,15 @@ def generate_podcast():
     config = Config()
     parser = DocumentParser()
     doc = parser.parse_document(file_path)
-    llm = llm_wrapper(config=config)
+    llm = llm_wrapper(config=config, api_key=api_key)
     TTS = TTS_wrapper()
     script = llm.generate_text(get_prompt(doc, topic=topic))
     if script.startswith('```json'):
         script = script[7:-3]
     script = json.loads(script.replace("json\n", ""))
     speech_file_path = TTS.get_audio(script, output_path=os.path.join('./tmp/', 'combined_audio.mp3'))
-    os.remove(file_path)
+    if os.path.exists(file_path):
+        os.remove(file_path)
         
     # Return the path to the generated audio file
     return jsonify({'audio_file_path': speech_file_path})
@@ -48,6 +53,10 @@ def answer_question():
     try:
         file = request.files['file']
         question = request.form['question']
+        api_key = request.form['api_key']
+        
+        if not api_key:
+            return jsonify({'error': 'OpenAI API key is required'}), 400
 
         # Create a temporary directory
         file_path = os.path.join('./tmp', file.filename)
@@ -58,10 +67,7 @@ def answer_question():
         config = Config()
         parser = DocumentParser()
         doc = parser.parse_document(file_path)
-        llm = llm_wrapper(config=config)
-        
-        config = Config()
-        llm = llm_wrapper(config=config)
+        llm = llm_wrapper(config=config, api_key=api_key)
         
         # Generate response using LLM
         response = llm.generate_text(f"""

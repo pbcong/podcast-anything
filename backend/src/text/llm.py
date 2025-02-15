@@ -6,11 +6,10 @@ load_dotenv()
 
 
 class llm_wrapper:
-    def __init__(self, config):
-        self.api_key = os.environ.get("OPENAI_API_KEY")
+    def __init__(self, config, api_key=None):
         self.model = config.text_model
         self.temperature = config.temperature
-        self.client = OpenAI(api_key=self.api_key)
+        self.client = OpenAI(api_key=api_key)
 
     def generate_text(self, prompt: str) -> str:
         response = self.client.chat.completions.create(
