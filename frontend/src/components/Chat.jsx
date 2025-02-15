@@ -1,11 +1,21 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 const API_URL = "http://127.0.0.1:5000";
+
 function Chat({ file }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = (e) => {
     setError("");
@@ -16,8 +26,13 @@ function Chat({ file }) {
     }
 
     if (newMessage.trim()) {
-      setMessages([...messages, { text: newMessage, sender: "user" }]);
+      // Store the current message
+      const currentMessage = { text: newMessage, sender: "user" };
+      const updatedMessages = [...messages, currentMessage];
+
+      setMessages(updatedMessages);
       setNewMessage("");
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("question", newMessage);
@@ -26,7 +41,7 @@ function Chat({ file }) {
         .post(`${API_URL}/answer_question`, formData)
         .then((response) => {
           setMessages([
-            ...messages,
+            ...updatedMessages, // Use updatedMessages instead of messages
             { text: response.data.answer, sender: "bot" },
           ]);
         })
@@ -82,6 +97,7 @@ function Chat({ file }) {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSend} className="border-t p-4 bg-white">
         <div className="flex gap-2">

@@ -43,5 +43,43 @@ def get_status():
 def download_audio(filename):
     return send_from_directory('./tmp', filename)
 
+@app.route('/answer_question', methods=['POST'])
+def answer_question():
+    try:
+        file = request.files['file']
+        question = request.form['question']
+
+        # Create a temporary directory
+        file_path = os.path.join('./tmp', file.filename)
+        os.makedirs('./tmp', exist_ok=True)
+        if not os.path.exists(file_path):
+            file.save(file_path)
+            
+        config = Config()
+        parser = DocumentParser()
+        doc = parser.parse_document(file_path)
+        llm = llm_wrapper(config=config)
+        
+        config = Config()
+        llm = llm_wrapper(config=config)
+        
+        # Generate response using LLM
+        response = llm.generate_text(f"""
+        Please provide a clear and concise answer to the question based on the context provided.
+        Context: {doc}
+        Question: {question}
+        """)
+        
+        return jsonify({
+            'status': 'success',
+            'answer': response
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
