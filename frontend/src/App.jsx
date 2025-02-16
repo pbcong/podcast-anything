@@ -5,7 +5,7 @@ import Form from "./components/Form";
 import Chat from "./components/Chat";
 
 function App() {
-  const API_URL = "http://54.204.68.173:5000/";
+  const API_URL = "http://54.204.68.173:5000";
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [apiKey, setApiKey] = useState("");
