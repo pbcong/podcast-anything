@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 const API_URL = "http://127.0.0.1:5000";
 
-function Chat({ file }) {
+function Chat({ file, apiKey }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
@@ -20,8 +20,12 @@ function Chat({ file }) {
   const handleSend = (e) => {
     setError("");
     e.preventDefault();
-    if (!file) {
-      setError("Please upload a document first");
+    if (!file || !apiKey) {
+      setError(
+        file
+          ? "Please enter your OpenAI API key"
+          : "Please upload a document first"
+      );
       return;
     }
 
@@ -36,6 +40,7 @@ function Chat({ file }) {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("question", newMessage);
+      formData.append("api_key", apiKey);
 
       axios
         .post(`${API_URL}/answer_question`, formData)
@@ -52,11 +57,13 @@ function Chat({ file }) {
     }
   };
 
-  if (!file) {
+  if (!file || !apiKey) {
     return (
       <div className="flex flex-col h-[500px] w-full max-w-2xl mx-auto border border-gray-300 rounded-lg bg-white shadow-xl items-center justify-center">
         <p className="text-gray-500">
-          Please upload a document to start chatting
+          {!file
+            ? "Please upload a document to start chatting"
+            : "Please enter your OpenAI API key"}
         </p>
       </div>
     );

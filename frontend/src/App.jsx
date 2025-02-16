@@ -5,17 +5,35 @@ import Form from "./components/Form";
 import Chat from "./components/Chat";
 
 function App() {
-  const API_URL = "http://127.0.0.1:5000";
+  const API_URL = "http://54.204.68.173:5000/";
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
+  const [apiKey, setApiKey] = useState("");
   const [filePath, setFilePath] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("running");
+    setError("");
+
+    if (!file) {
+      setError("Please select a PDF file");
+      return;
+    }
+
+    if (!topic.trim()) {
+      setError("Please enter a topic");
+      return;
+    }
+
+    if (!apiKey.trim()) {
+      setError("Please enter your OpenAI API key");
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("topic", topic);
+    formData.append("api_key", apiKey);
     try {
       setLoading(true);
       const response = await axios.post(
@@ -26,13 +44,23 @@ function App() {
       console.log(response);
       setFilePath(response.data.audio_file_path);
     } catch (error) {
+      setLoading(false);
+      setError(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          "An error occurred while generating the podcast"
+      );
       console.error(error);
     }
   };
   const handleTextChange = (event) => {
     event.preventDefault();
     setTopic(event.target.value);
-    // console.log(topic);
+  };
+
+  const handleApiKeyChange = (event) => {
+    event.preventDefault();
+    setApiKey(event.target.value);
   };
   const handleFileChange = (event) => {
     event.preventDefault();
@@ -44,15 +72,19 @@ function App() {
       <Form
         handleFileChange={handleFileChange}
         handleTextChange={handleTextChange}
+        handleApiKeyChange={handleApiKeyChange}
         handleSubmit={handleSubmit}
+        topic={topic}
+        apiKey={apiKey}
         loading={loading}
+        error={error}
       />
 
       <div className="mt-12 mb-8">
         <h2 className="text-2xl font-semibold text-center mb-4">
           Ask me anything about the document
         </h2>
-        <Chat file={file} />
+        <Chat file={file} apiKey={apiKey} />
       </div>
 
       {filePath && (

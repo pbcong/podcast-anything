@@ -4,15 +4,26 @@ import { useState } from "react";
 const Form = ({
   handleFileChange,
   handleTextChange,
+  handleApiKeyChange,
   handleSubmit,
   topic,
+  apiKey,
   loading,
+  error,
 }) => {
   return (
     <form
       onSubmit={handleSubmit}
       className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
     >
+      {error && (
+        <div
+          className="mb-6 p-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded"
+          role="alert"
+        >
+          <p>{error}</p>
+        </div>
+      )}
       <div className="mb-6">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -38,6 +49,25 @@ const Form = ({
               transition-colors duration-200"
           />
         </div>
+      </div>
+      <div className="mb-6">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="apiKey"
+        >
+          OpenAI API Key
+        </label>
+        <input
+          type="password"
+          id="apiKey"
+          name="apiKey"
+          placeholder="Enter your OpenAI API key"
+          value={apiKey}
+          onChange={handleApiKeyChange}
+          className="w-full px-3 py-2 border rounded-lg
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            placeholder-gray-400 transition-colors duration-200"
+        />
       </div>
       <div className="mb-6">
         <label
