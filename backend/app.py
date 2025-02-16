@@ -28,7 +28,7 @@ def generate_podcast():
     parser = DocumentParser()
     doc = parser.parse_document(file_path)
     llm = llm_wrapper(config=config, api_key=api_key)
-    TTS = TTS_wrapper()
+    TTS = TTS_wrapper(api_key)
     script = llm.generate_text(get_prompt(doc, topic=topic))
     if script.startswith('```json'):
         script = script[7:-3]

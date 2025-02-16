@@ -4,8 +4,9 @@ import axios from "axios";
 import Form from "./components/Form";
 import Chat from "./components/Chat";
 
+const API_URL = "http://54.204.68.173:5000";
+
 function App() {
-  const API_URL = "http://54.204.68.173:5000";
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [apiKey, setApiKey] = useState("");
@@ -84,7 +85,7 @@ function App() {
         <h2 className="text-2xl font-semibold text-center mb-4">
           Ask me anything about the document
         </h2>
-        <Chat file={file} apiKey={apiKey} />
+        <Chat file={file} apiKey={apiKey} apiUrl={API_URL} />
       </div>
 
       {filePath && (

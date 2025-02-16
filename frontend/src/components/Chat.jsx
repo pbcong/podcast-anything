@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-const API_URL = "http://127.0.0.1:5000";
 
-function Chat({ file, apiKey }) {
+function Chat({ file, apiKey, apiUrl }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
@@ -43,7 +42,7 @@ function Chat({ file, apiKey }) {
       formData.append("api_key", apiKey);
 
       axios
-        .post(`${API_URL}/answer_question`, formData)
+        .post(`${apiUrl}/answer_question`, formData)
         .then((response) => {
           setMessages([
             ...updatedMessages, // Use updatedMessages instead of messages

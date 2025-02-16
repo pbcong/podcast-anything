@@ -10,9 +10,8 @@ warnings.filterwarnings("ignore")
 load_dotenv()
 
 class TTS_wrapper:
-    def __init__(self):
-        self.api_key = os.environ.get("OPENAI_API_KEY")
-        self.client = OpenAI(api_key=self.api_key)
+    def __init__(self, api_key):
+        self.client = OpenAI(api_key=api_key)
 
     def get_audio(self, script: object, output_path: str, model: str = "tts-1") -> Path:
         

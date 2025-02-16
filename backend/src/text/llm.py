@@ -11,7 +11,7 @@ class llm_wrapper:
         self.temperature = config.temperature
         self.client = OpenAI(api_key=api_key)
 
-    def generate_text(self, prompt: str) -> str:
+    def generate_text(self, prompt: str, stream=False):
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -21,8 +21,10 @@ class llm_wrapper:
                 },
             ],
             temperature=self.temperature,
+            stream=stream
         )
-        # print(response)
+        if stream:
+            return response
         return response.choices[0].message.content
 
     def make_prompt(self, document, topic, prompt_template):
