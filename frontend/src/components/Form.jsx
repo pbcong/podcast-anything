@@ -5,9 +5,11 @@ const Form = ({
   handleFileChange,
   handleTextChange,
   handleApiKeyChange,
+  handleModelChange,
   handleSubmit,
   topic,
   apiKey,
+  ttsModel,
   loading,
   error,
 }) => {
@@ -69,6 +71,27 @@ const Form = ({
             placeholder-gray-400 transition-colors duration-200"
         />
       </div>
+      <div className="mb-6">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="ttsModel"
+        >
+          TTS Model
+        </label>
+        <select
+          id="ttsModel"
+          name="ttsModel"
+          value={ttsModel}
+          onChange={handleModelChange}
+          className="w-full px-3 py-2 border rounded-lg
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            bg-white transition-colors duration-200"
+        >
+          <option value="tts-1">OpenAI TTS-1</option>
+          <option value="kokoro">Kokoro 82M</option>
+        </select>
+      </div>
+
       <div className="mb-6">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"

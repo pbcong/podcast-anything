@@ -3,13 +3,13 @@ import "./App.css";
 import axios from "axios";
 import Form from "./components/Form";
 import Chat from "./components/Chat";
-
-const API_URL = "http://54.204.68.173:5000";
+import { API_URL } from "./config";
 
 function App() {
   const [file, setFile] = useState(null);
   const [topic, setTopic] = useState("");
   const [apiKey, setApiKey] = useState("");
+  const [ttsModel, setTtsModel] = useState("tts-1");
   const [filePath, setFilePath] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,6 +35,7 @@ function App() {
     formData.append("file", file);
     formData.append("topic", topic);
     formData.append("api_key", apiKey);
+    formData.append("tts_model", ttsModel);
     try {
       setLoading(true);
       const response = await axios.post(
@@ -66,7 +67,11 @@ function App() {
   const handleFileChange = (event) => {
     event.preventDefault();
     setFile(event.target.files[0]);
-    // console.log(file);
+  };
+
+  const handleModelChange = (event) => {
+    event.preventDefault();
+    setTtsModel(event.target.value);
   };
   return (
     <div className="App">
@@ -79,6 +84,8 @@ function App() {
         apiKey={apiKey}
         loading={loading}
         error={error}
+        ttsModel={ttsModel}
+        handleModelChange={handleModelChange}
       />
 
       <div className="mt-12 mb-8">
