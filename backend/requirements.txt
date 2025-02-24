@@ -10,3 +10,5 @@ moviepy
 python-docx
 pydantic
 PyPDF2
+kokoro>=0.3.4
+soundfile

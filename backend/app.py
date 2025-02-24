@@ -15,6 +15,7 @@ def generate_podcast():
     file = request.files['file']
     topic = request.form['topic']
     api_key = request.form['api_key']
+    tts_model = request.form.get('tts_model', 'tts-1')  # Default to OpenAI TTS
     
     if not api_key:
         return jsonify({'error': 'OpenAI API key is required'}), 400
@@ -33,7 +34,7 @@ def generate_podcast():
     if script.startswith('```json'):
         script = script[7:-3]
     script = json.loads(script.replace("json\n", ""))
-    speech_file_path = TTS.get_audio(script, output_path=os.path.join('./tmp/', 'combined_audio.mp3'))
+    speech_file_path = TTS.get_audio(script, output_path=os.path.join('./tmp/', 'combined_audio.mp3'), model=tts_model)
     if os.path.exists(file_path):
         os.remove(file_path)
         
@@ -88,4 +89,4 @@ def answer_question():
         }), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
