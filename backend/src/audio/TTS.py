@@ -76,13 +76,13 @@ class TTS_wrapper:
 
     def _generate_audio_kokoro(self, role, text, speech_file_path):
         try:
-            print(f"Generating audio for text: {text}")
+            # print(f"Generating audio for text: {text}")
             self._init_kokoro()  # Initialize Kokoro pipeline if not already done
-            print("Kokoro pipeline initialized")
+            # print("Kokoro pipeline initialized")
             
             # Use different voices for host and guest
             voice = 'am_fenrir' if role == 'Host' else 'af_heart'
-            print(f"Using voice: {voice}")
+            # print(f"Using voice: {voice}")
             
             # Generate speech using Kokoro pipeline
             generator = self.kokoro_pipeline(
@@ -91,12 +91,12 @@ class TTS_wrapper:
                 speed=1.0,
                 split_pattern=None  # Don't split the text
             )
-            print("Generator created")
+            # print("Generator created")
             
             # Collect all audio segments
             audio_segments = []
             for _, _, audio in generator:
-                print(f"Received audio segment of shape: {audio.shape}")
+                # print(f"Received audio segment of shape: {audio.shape}")
                 audio_segments.append(audio)
             
             if not audio_segments:
@@ -108,11 +108,11 @@ class TTS_wrapper:
             # Ensure the directory exists
             os.makedirs(os.path.dirname(speech_file_path) if os.path.dirname(speech_file_path) else '.', exist_ok=True)
             
-            print(f"Writing audio to: {speech_file_path}")
+            # print(f"Writing audio to: {speech_file_path}")
             sf.write(str(speech_file_path), final_audio, self.sample_rate)
-            print(f"Audio file written successfully: {os.path.exists(speech_file_path)}")
+            # print(f"Audio file written successfully: {os.path.exists(speech_file_path)}")
             
             return speech_file_path
         except Exception as e:
-            print(f"Error in _generate_audio_kokoro: {str(e)}")
+            # print(f"Error in _generate_audio_kokoro: {str(e)}")
             raise
